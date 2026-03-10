@@ -2,6 +2,19 @@
 
 A Rails gem that automatically creates GitHub issues when uncaught exceptions occur. Includes deduplication (comments on existing open issues instead of creating duplicates), rate limiting, request context capture, and async reporting.
 
+## Auto-Fix Bugs with GitHub Copilot
+
+BugCourier turns your production exceptions into GitHub issues — and **GitHub Copilot can automatically fix them**.
+
+When Copilot is enabled on your repository, it can pick up BugCourier-created issues (complete with backtraces, request context, and error fingerprints) and open pull requests with fixes. This creates a powerful loop:
+
+1. An uncaught exception occurs in production
+2. BugCourier creates a detailed GitHub issue with the full error context
+3. Copilot reads the issue and opens a PR with a proposed fix
+4. You review and merge
+
+No manual triage. No copying stack traces. Just assign Copilot to BugCourier issues and let it work.
+
 ## Installation
 
 Add to your Gemfile:
