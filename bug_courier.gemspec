@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = "A Rails gem that catches uncaught exceptions and automatically creates GitHub issues with full error details, backtraces, and request context. Includes deduplication to avoid flooding your repo with duplicate issues."
   spec.homepage = "https://github.com/sgnh/bug-courier"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.2.0"
+  spec.required_ruby_version = ">= 2.7.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/sgnh/bug-courier"
@@ -28,6 +28,6 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "railties", ">= 7.0"
+  spec.add_dependency "railties", ">= 6.1"
   spec.add_dependency "net-http"
 end
