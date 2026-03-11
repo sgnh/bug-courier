@@ -2,6 +2,13 @@
 
 All notable changes to BugCourier are documented in this file.
 
+## [v1.1.1](https://github.com/sgnh/bug-courier/compare/v1.1.0...v1.1.1) — 2026-03-11
+
+### Fixed
+
+- Middleware now rescues only `StandardError`, avoiding interception of fatal Ruby exceptions such as `SystemExit` and `SignalException`
+- `GithubClient` now handles transport failures that return no HTTP response without raising secondary `NoMethodError` exceptions
+
 ## [v1.1.0](https://github.com/sgnh/bug-courier/compare/v1.0.0...v1.1.0) — 2026-03-11
 
 ### Added
