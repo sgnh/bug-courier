@@ -3,7 +3,7 @@
 module BugCourier
   class Configuration
     attr_accessor :access_token, :repo, :labels, :assignees, :enabled,
-                  :deduplicate, :rate_limit, :callback
+                  :deduplicate, :rate_limit, :callback, :ignore_exceptions
 
     def initialize
       @access_token = nil
@@ -14,6 +14,7 @@ module BugCourier
       @deduplicate = true
       @rate_limit = 10 # max issues per hour
       @callback = nil
+      @ignore_exceptions = []
     end
 
     def valid?

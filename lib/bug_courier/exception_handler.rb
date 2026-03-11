@@ -30,6 +30,7 @@ module BugCourier
     def handle(exception, env = {})
       return unless BugCourier.configuration.enabled
       return unless BugCourier.configuration.valid?
+      return if ignored?(exception)
       return unless @rate_limiter.allow?
 
       title = build_title(exception)
@@ -136,6 +137,15 @@ module BugCourier
       return nil if params.nil? || params.empty?
 
       params.except("controller", "action").to_s.slice(0, 500)
+    end
+
+    def ignored?(exception)
+      BugCourier.configuration.ignore_exceptions.any? do |klass|
+        klass = Object.const_get(klass) if klass.is_a?(String)
+        exception.is_a?(klass)
+      rescue NameError
+        false
+      end
     end
   end
 end

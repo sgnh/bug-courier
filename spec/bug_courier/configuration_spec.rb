@@ -9,6 +9,7 @@ RSpec.describe BugCourier::Configuration do
     expect(config.enabled).to be true
     expect(config.deduplicate).to be true
     expect(config.rate_limit).to eq(10)
+    expect(config.ignore_exceptions).to eq([])
   end
 
   describe "#valid?" do

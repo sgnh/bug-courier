@@ -26,6 +26,34 @@ RSpec.describe BugCourier::ExceptionHandler do
       handler.handle(exception)
     end
 
+    it "does nothing when exception class is ignored" do
+      BugCourier.configuration.ignore_exceptions = [StandardError]
+
+      expect(BugCourier::GithubClient).not_to receive(:new)
+      handler.handle(exception)
+    end
+
+    it "does nothing when exception matches ignored string class name" do
+      BugCourier.configuration.ignore_exceptions = ["StandardError"]
+
+      expect(BugCourier::GithubClient).not_to receive(:new)
+      handler.handle(exception)
+    end
+
+    it "does not ignore exceptions that are not in the ignore list" do
+      BugCourier.configuration.ignore_exceptions = [ArgumentError]
+
+      client = instance_double(BugCourier::GithubClient)
+      allow(BugCourier::GithubClient).to receive(:new).and_return(client)
+      allow(client).to receive(:find_open_issue).and_return(nil)
+      allow(client).to receive(:create_issue).and_return({ "number" => 1 })
+
+      handler.handle(exception)
+      sleep(0.2)
+
+      expect(client).to have_received(:create_issue)
+    end
+
     it "creates a GitHub issue asynchronously" do
       client = instance_double(BugCourier::GithubClient)
       allow(BugCourier::GithubClient).to receive(:new).and_return(client)

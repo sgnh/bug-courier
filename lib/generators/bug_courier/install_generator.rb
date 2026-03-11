@@ -34,6 +34,12 @@ module BugCourier
             # Maximum number of issues to create per hour (default: 10)
             # config.rate_limit = 10
 
+            # Exception classes to ignore — these will not be reported (default: [])
+            # config.ignore_exceptions = [
+            #   ActiveRecord::RecordNotFound,
+            #   ActionController::RoutingError,
+            # ]
+
             # Optional callback — called after issue creation or commenting
             # config.callback = ->(action, issue) {
             #   Rails.logger.info("[BugCourier] \#{action}: \#{issue['html_url']}")
