@@ -26,7 +26,7 @@ module BugCourier
       response = post(uri, payload)
 
       unless response.is_a?(Net::HTTPCreated)
-        BugCourier.logger&.error("[BugCourier] Failed to create GitHub issue: #{response.code} #{response.body}")
+        log_failure("Failed to create GitHub issue", response)
         return nil
       end
 
@@ -41,7 +41,7 @@ module BugCourier
       response = get(uri)
 
       unless response.is_a?(Net::HTTPOK)
-        BugCourier.logger&.error("[BugCourier] Failed to search GitHub issues: #{response.code} #{response.body}")
+        log_failure("Failed to search GitHub issues", response)
         return nil
       end
 
@@ -56,7 +56,7 @@ module BugCourier
       response = post(uri, { body: body })
 
       unless response.is_a?(Net::HTTPCreated)
-        BugCourier.logger&.error("[BugCourier] Failed to add comment to issue ##{issue_number}: #{response.code} #{response.body}")
+        log_failure("Failed to add comment to issue ##{issue_number}", response)
         return nil
       end
 
@@ -94,6 +94,16 @@ module BugCourier
     rescue StandardError => e
       BugCourier.logger&.error("[BugCourier] HTTP request failed: #{e.message}")
       nil
+    end
+
+    def log_failure(message, response)
+      details = if response.nil?
+                  "no response received"
+                else
+                  "#{response.code} #{response.body}"
+                end
+
+      BugCourier.logger&.error("[BugCourier] #{message}: #{details}")
     end
   end
 end

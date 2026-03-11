@@ -24,6 +24,12 @@ RSpec.describe BugCourier::GithubClient do
       result = client.create_issue(title: "Test", body: "Test")
       expect(result).to be_nil
     end
+
+    it "returns nil when the HTTP request fails" do
+      allow(client).to receive(:post).and_return(nil)
+
+      expect(client.create_issue(title: "Test", body: "Test")).to be_nil
+    end
   end
 
   describe "#find_open_issue" do
@@ -48,6 +54,12 @@ RSpec.describe BugCourier::GithubClient do
       result = client.find_open_issue(title: "Non-existent")
       expect(result).to be_nil
     end
+
+    it "returns nil when the search request fails" do
+      allow(client).to receive(:get).and_return(nil)
+
+      expect(client.find_open_issue(title: "Test Issue")).to be_nil
+    end
   end
 
   describe "#add_comment" do
@@ -59,6 +71,12 @@ RSpec.describe BugCourier::GithubClient do
       result = client.add_comment(issue_number: 42, body: "Occurred again")
       expect(stub).to have_been_requested
       expect(result["id"]).to eq(1)
+    end
+
+    it "returns nil when the comment request fails" do
+      allow(client).to receive(:post).and_return(nil)
+
+      expect(client.add_comment(issue_number: 42, body: "Occurred again")).to be_nil
     end
   end
 end
