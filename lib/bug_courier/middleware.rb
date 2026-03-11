@@ -9,7 +9,7 @@ module BugCourier
 
     def call(env)
       @app.call(env)
-    rescue Exception => exception # rubocop:disable Lint/RescueException
+    rescue StandardError => exception
       @handler.handle(exception, env)
       raise
     end

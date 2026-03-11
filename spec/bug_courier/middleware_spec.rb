@@ -29,4 +29,17 @@ RSpec.describe BugCourier::Middleware do
     expect { error_middleware.call("REQUEST_METHOD" => "GET") }.to raise_error(StandardError)
     expect(handler).to have_received(:handle).with(kind_of(StandardError), kind_of(Hash))
   end
+
+  it "does not call the exception handler for fatal exceptions" do
+    fatal_error = Class.new(Exception)
+    handler = instance_double(BugCourier::ExceptionHandler)
+    allow(BugCourier::ExceptionHandler).to receive(:new).and_return(handler)
+    allow(handler).to receive(:handle)
+
+    error_app = ->(_env) { raise fatal_error, "shutdown" }
+    error_middleware = described_class.new(error_app)
+
+    expect { error_middleware.call({}) }.to raise_error(fatal_error, "shutdown")
+    expect(handler).not_to have_received(:handle)
+  end
 end
