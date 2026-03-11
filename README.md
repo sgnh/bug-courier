@@ -70,8 +70,8 @@ Create a [GitHub personal access token](https://github.com/settings/tokens) with
 
 ## How It Works
 
-1. BugCourier inserts a Rack middleware at the top of your middleware stack
-2. When an uncaught exception propagates up, the middleware catches it, reports it asynchronously, then re-raises it so normal error handling continues
+1. BugCourier inserts a Rack middleware after `ActionDispatch::DebugExceptions` in the Rails middleware stack
+2. When a `StandardError` propagates up to that layer, the middleware reports it asynchronously, then re-raises it so normal error handling continues
 3. If deduplication is enabled, it searches for an existing open issue with the same title and adds a comment instead of creating a duplicate
 4. Rate limiting prevents flooding your repository with issues during error spikes
 
